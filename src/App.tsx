@@ -4,6 +4,7 @@ import { Dashboard, type View } from './components/Dashboard'
 import { SectionView } from './components/SectionView'
 import { VoiceGuide } from './components/VoiceGuide'
 import { CaregiverView } from './components/CaregiverView'
+import { ExportBar } from './components/ExportBar'
 
 function ProfileSetup({
   childName,
@@ -84,6 +85,7 @@ export default function App() {
 
   return (
     <div className="container">
+      {!showSetup && <ExportBar data={data} />}
       {showSetup ? (
         <ProfileSetup childName={data.childName} childAge={data.childAge} onSave={updateProfile} />
       ) : view === 'dashboard' ? (
