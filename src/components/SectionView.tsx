@@ -23,14 +23,17 @@ export function SectionView({ data, sectionId, onBack, onUpdateField }: SectionV
         ← Back
       </button>
 
-      <h1 style={{ marginTop: 12 }}>{section.title}</h1>
-      <p className="muted">{section.description} — {percent}% done</p>
+      <header className="page-header">
+        <span className="section-icon purple">{section.icon}</span>
+        <h1>{section.title}</h1>
+        <p className="muted">{section.description}</p>
+        <div className="bar">
+          <div className="bar-fill" style={{ width: `${percent}%` }} />
+        </div>
+        <p className="muted" style={{ fontSize: '0.85rem' }}>{percent}% complete</p>
+      </header>
 
-      <div className="bar">
-        <div className="bar-fill" style={{ width: `${percent}%` }} />
-      </div>
-
-      <div className="block" style={{ marginTop: 16 }}>
+      <div className="card">
         {section.fields.map((field) => (
           <FieldInput
             key={field.id}
@@ -41,7 +44,9 @@ export function SectionView({ data, sectionId, onBack, onUpdateField }: SectionV
         ))}
       </div>
 
-      <p className="muted center">Tap Mic on any field to use voice input.</p>
+      <p className="muted center" style={{ marginTop: 16 }}>
+        Tap <strong>Mic</strong> on any field to fill it by voice
+      </p>
     </div>
   )
 }

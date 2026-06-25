@@ -4,6 +4,8 @@ import { getCompletionPercent, getMissingFields, getSectionCompletion } from '..
 
 type View = 'dashboard' | 'section' | 'guide' | 'caregiver'
 
+const ICON_COLORS = ['purple', 'teal', 'pink', 'coral', 'sky'] as const
+
 interface DashboardProps {
   data: PassportData
   onNavigate: (view: View, sectionId?: string) => void
@@ -15,56 +17,69 @@ export function Dashboard({ data, onNavigate }: DashboardProps) {
 
   return (
     <div>
-      <p className="site-title">Carelogue</p>
-      <h1>{data.childName ? `${data.childName}'s care passport` : 'Care passport'}</h1>
-      {data.childAge && <p className="muted">Age {data.childAge}</p>}
-      <p className="progress-text">
-        {percent}% complete
-        {percent < 100 && ` — ${missing.length} item${missing.length === 1 ? '' : 's'} missing`}
-      </p>
+      <header className="hero">
+        <p className="site-title">Carelogue</p>
+        <h1>{data.childName ? `${data.childName}'s care passport` : 'Care passport'}</h1>
+        {data.childAge && <p className="muted">Age {data.childAge}</p>}
+        <div className="hero-badge">
+          <span className="dot" />
+          {percent}% complete
+          {percent < 100 && ` · ${missing.length} to go`}
+        </div>
+      </header>
 
       {missing.length > 0 && (
-        <div className="block">
+        <div className="card card-highlight">
           <h2>What&apos;s missing</h2>
-          <p className="muted">Use &ldquo;Guide me&rdquo; to fill these in by voice.</p>
+          <p className="muted">Fill gaps quickly with voice — we&apos;ll walk you through each one.</p>
           <ul className="missing-list">
-            {missing.slice(0, 8).map((m) => (
+            {missing.slice(0, 6).map((m) => (
               <li key={`${m.sectionId}-${m.field.id}`}>
-                {m.field.label} <span className="muted">({m.sectionTitle})</span>
+                <span>
+                  <strong>{m.field.label}</strong>
+                  <span className="muted"> · {m.sectionTitle}</span>
+                </span>
               </li>
             ))}
-            {missing.length > 8 && <li className="muted">+{missing.length - 8} more</li>}
+            {missing.length > 6 && (
+              <li><span className="muted">+{missing.length - 6} more items</span></li>
+            )}
           </ul>
           <button type="button" className="btn btn-primary btn-block" onClick={() => onNavigate('guide')}>
-            Guide me (voice)
+            Guide me with voice
           </button>
         </div>
       )}
 
-      <hr />
-
-      <h2>Sections</h2>
-      {SECTIONS.map((section) => {
-        const sectionPercent = getSectionCompletion(data, section.id)
-        return (
-          <button
-            key={section.id}
-            type="button"
-            className="section-btn"
-            onClick={() => onNavigate('section', section.id)}
-          >
-            <div className="section-btn-title">{section.title}</div>
-            <div className="section-btn-meta">
-              {section.description} — {sectionPercent}% done
-            </div>
-          </button>
-        )
-      })}
+      <p className="section-label">Sections</p>
+      <div className="section-grid">
+        {SECTIONS.map((section, i) => {
+          const sectionPercent = getSectionCompletion(data, section.id)
+          const color = ICON_COLORS[i % ICON_COLORS.length]
+          return (
+            <button
+              key={section.id}
+              type="button"
+              className="section-btn"
+              onClick={() => onNavigate('section', section.id)}
+            >
+              <span className={`section-icon ${color}`}>{section.icon}</span>
+              <div className="section-btn-body">
+                <div className="section-btn-title">{section.title}</div>
+                <div className="section-btn-meta">{section.description}</div>
+              </div>
+              <span className={`section-progress ${sectionPercent === 100 ? 'done' : 'pending'}`}>
+                {sectionPercent}%
+              </span>
+            </button>
+          )
+        })}
+      </div>
 
       {percent > 20 && (
         <>
-          <hr />
-          <button type="button" className="btn btn-block" onClick={() => onNavigate('caregiver')}>
+          <div className="divider" />
+          <button type="button" className="btn btn-secondary btn-block" onClick={() => onNavigate('caregiver')}>
             Read to caregiver
           </button>
         </>

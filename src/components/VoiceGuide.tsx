@@ -79,10 +79,11 @@ export function VoiceGuide({ data, onUpdate, onBack }: VoiceGuideProps) {
   if (isComplete) {
     return (
       <div className="center">
-        <h1>Done</h1>
-        <p className="muted">You&apos;ve gone through all the prompts.</p>
-        <button type="button" className="btn btn-primary" onClick={onBack} style={{ marginTop: 16 }}>
-          Back
+        <div className="welcome-emoji">🎉</div>
+        <h1>All caught up!</h1>
+        <p className="muted">You&apos;ve filled in everything we asked about.</p>
+        <button type="button" className="btn btn-primary" onClick={onBack} style={{ marginTop: 20 }}>
+          Back to passport
         </button>
       </div>
     )
@@ -94,29 +95,29 @@ export function VoiceGuide({ data, onUpdate, onBack }: VoiceGuideProps) {
         ← Back
       </button>
 
-      <p className="muted" style={{ marginTop: 12 }}>
+      <p className="muted" style={{ marginTop: 16 }}>
         Question {index + 1} of {missing.length}
       </p>
       <div className="bar">
         <div className="bar-fill" style={{ width: `${(index / missing.length) * 100}%` }} />
       </div>
 
-      <div className="block center" style={{ marginTop: 16 }}>
-        <p className="muted">{current.sectionTitle}</p>
+      <div className="card card-highlight center">
+        <p className="site-title" style={{ marginBottom: 12 }}>{current.sectionTitle}</p>
         <h2>{current.field.label}</h2>
         <p className="muted">&ldquo;{current.field.prompt}&rdquo;</p>
 
-        <div style={{ margin: '16px 0' }}>
+        <div style={{ margin: '20px 0' }}>
           <VoiceButton isListening={isListening} supported={sttSupported} onClick={handleVoiceToggle} />
         </div>
 
-        {isSpeaking && <p className="muted">Speaking…</p>}
-        {isListening && <p className="listening">Listening… speak now</p>}
+        {isSpeaking && <p className="muted">Speaking question…</p>}
+        {isListening && <p className="listening">Listening — speak now</p>}
 
         {phase === 'confirm' && transcript && (
           <div>
             <p>I heard: <strong>&ldquo;{transcript}&rdquo;</strong></p>
-            <div className="guide-actions" style={{ marginTop: 12 }}>
+            <div className="guide-actions">
               <button type="button" className="btn btn-primary" onClick={() => saveAnswer(transcript)}>
                 Save
               </button>
@@ -128,16 +129,16 @@ export function VoiceGuide({ data, onUpdate, onBack }: VoiceGuideProps) {
         )}
 
         {!isListening && phase === 'listen' && !transcript && (
-          <p className="muted">Tap Mic to answer.</p>
+          <p className="muted">Tap Mic to answer</p>
         )}
       </div>
 
-      <div className="guide-actions" style={{ marginTop: 12 }}>
+      <div className="guide-actions">
         <button type="button" className="btn" onClick={speakPrompt} disabled={isSpeaking}>
           Replay question
         </button>
         <button type="button" className="btn" onClick={handleSkip}>
-          Skip
+          Skip for now
         </button>
       </div>
     </div>

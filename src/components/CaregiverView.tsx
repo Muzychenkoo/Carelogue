@@ -4,6 +4,8 @@ import { SECTIONS } from '../data/sections'
 import { buildReadAloudText, formatFieldValue } from '../lib/passport'
 import { useSpeechSynthesis } from '../hooks/useVoice'
 
+const ICON_COLORS = ['purple', 'teal', 'pink', 'coral', 'sky'] as const
+
 interface CaregiverViewProps {
   data: PassportData
   onBack: () => void
@@ -27,29 +29,30 @@ export function CaregiverView({ data, onBack }: CaregiverViewProps) {
         ← Back
       </button>
 
-      <h1 style={{ marginTop: 12 }}>For caregivers</h1>
-      <p className="muted">Everything to know about {name}.</p>
+      <header className="page-header">
+        <h1>For caregivers</h1>
+        <p className="muted">Everything to know about {name}</p>
+      </header>
 
       <button
         type="button"
         className="btn btn-primary btn-block"
         onClick={handleReadAll}
         disabled={!supported}
-        style={{ marginTop: 16 }}
       >
         {isSpeaking ? 'Stop reading' : 'Read entire passport aloud'}
       </button>
 
-      {!supported && <p className="muted center">Text-to-speech not supported in this browser.</p>}
+      {!supported && <p className="muted center" style={{ marginTop: 12 }}>Text-to-speech not supported in this browser.</p>}
 
       {data.childName && (
-        <div className="block" style={{ marginTop: 20 }}>
-          <strong>{data.childName}</strong>
-          {data.childAge && <span className="muted"> — age {data.childAge}</span>}
+        <div className="card" style={{ marginTop: 20 }}>
+          <strong style={{ fontSize: '1.1rem' }}>{data.childName}</strong>
+          {data.childAge && <span className="muted"> · age {data.childAge}</span>}
         </div>
       )}
 
-      {SECTIONS.map((section) => {
+      {SECTIONS.map((section, i) => {
         const sectionData = data.sections[section.id] ?? {}
         const filledFields = section.fields.filter((f) => {
           const v = sectionData[f.id]
@@ -60,11 +63,17 @@ export function CaregiverView({ data, onBack }: CaregiverViewProps) {
         const sectionText = filledFields
           .map((f) => `${f.label}: ${formatFieldValue(f, sectionData[f.id])}`)
           .join('. ')
+        const color = ICON_COLORS[i % ICON_COLORS.length]
 
         return (
-          <div key={section.id} className="block caregiver-section">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-              <h2>{section.title}</h2>
+          <div key={section.id} className="card caregiver-section">
+            <div className="caregiver-header">
+              <h2 className="card-title">
+                <span className={`section-icon ${color}`} style={{ width: 36, height: 36, fontSize: '1.1rem' }}>
+                  {section.icon}
+                </span>
+                {section.title}
+              </h2>
               {supported && (
                 <button type="button" className="btn-link" onClick={() => speak(`${section.title}. ${sectionText}`)}>
                   Read

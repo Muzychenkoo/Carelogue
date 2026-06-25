@@ -18,12 +18,13 @@ function ProfileSetup({
   const [age, setAge] = useState(childAge)
 
   return (
-    <div>
+    <div className="center">
+      <div className="welcome-emoji">✨</div>
       <p className="site-title">Carelogue</p>
-      <h1>Care passport</h1>
-      <p className="muted">A simple guide for anyone looking after your child.</p>
+      <h1>Your child&apos;s care passport</h1>
+      <p className="muted">Everything a new caregiver needs — sleep, food, routines, and more.</p>
 
-      <div className="block" style={{ marginTop: 20 }}>
+      <div className="card" style={{ marginTop: 28, textAlign: 'left' }}>
         <div className="field">
           <label className="field-label">
             Child&apos;s name <span className="req">*</span>
