@@ -22,9 +22,19 @@ function ProfileSetup({
       <div className="welcome-emoji">✨</div>
       <p className="site-title">Carelogue</p>
       <h1>Your child&apos;s care passport</h1>
-      <p className="muted">Everything a new caregiver needs — sleep, food, routines, and more.</p>
 
-      <div className="card" style={{ marginTop: 28, textAlign: 'left' }}>
+      <div className="intro">
+        <p>
+          This helps you collect all the necessary information about your child,
+          so they can feel comfortable with anyone — a grandparent, babysitter, or nursery.
+        </p>
+        <p>
+          We&apos;ll guide you step by step and show you what&apos;s still missing,
+          so you don&apos;t forget anything important.
+        </p>
+      </div>
+
+      <div className="card" style={{ marginTop: 24, textAlign: 'left' }}>
         <div className="field">
           <label className="field-label">
             Child&apos;s name <span className="req">*</span>

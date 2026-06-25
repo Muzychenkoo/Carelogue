@@ -529,6 +529,33 @@ textarea {
   margin-bottom: 8px;
 }
 
+.intro {
+  text-align: left;
+  margin: 20px 0 0;
+  padding: 18px 20px;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: var(--radius);
+  border: 1px solid rgba(124, 58, 237, 0.1);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.intro p {
+  margin: 0 0 12px;
+}
+
+.intro p:last-child {
+  margin-bottom: 0;
+}
+
+.intro-compact {
+  text-align: center;
+  margin-top: 12px;
+  padding: 14px 16px;
+  font-size: 0.9rem;
+}
+
 .divider {
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(124, 58, 237, 0.15), transparent);

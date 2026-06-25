@@ -21,6 +21,10 @@ export function Dashboard({ data, onNavigate }: DashboardProps) {
         <p className="site-title">Carelogue</p>
         <h1>{data.childName ? `${data.childName}'s care passport` : 'Care passport'}</h1>
         {data.childAge && <p className="muted">Age {data.childAge}</p>}
+        <p className="intro intro-compact">
+          Collect everything caregivers need so your child feels comfortable with anyone.
+          We&apos;ll guide you so nothing important gets forgotten.
+        </p>
         <div className="hero-badge">
           <span className="dot" />
           {percent}% complete
