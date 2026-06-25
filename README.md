@@ -4,7 +4,7 @@ A voice-enabled care passport for your child. Build a structured guide that any 
 
 ## Features
 
-- **Structured sections** — Sleep, food, settling, daily routine, medical, communication, and emergency contacts
+- **Structured sections** — Sleep, food (with feeding schedule & hunger cues), settling, daily routine & games, red flags, medical, communication, and emergency contacts
 - **Completion tracking** — See what's filled in and what's still missing
 - **Voice input** — Tap the microphone on any field, or use "Guide me" to fill gaps one question at a time
 - **Voice output** — Read the entire passport aloud to a new caregiver, or read individual sections
