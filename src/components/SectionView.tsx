@@ -18,34 +18,19 @@ export function SectionView({ data, sectionId, onBack, onUpdateField }: SectionV
   const percent = getSectionCompletion(data, sectionId)
 
   return (
-    <div className="animate-fade-in space-y-6">
-      <header className="space-y-3">
-        <button
-          type="button"
-          onClick={onBack}
-          className="text-sage font-medium text-sm hover:underline"
-        >
-          ← Back
-        </button>
-        <div className="flex items-center gap-3">
-          <span className="text-4xl">{section.icon}</span>
-          <div>
-            <h1 className="text-2xl font-bold text-navy">{section.title}</h1>
-            <p className="text-navy-light text-sm">{section.description}</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="flex-1 h-2 rounded-full bg-warm overflow-hidden">
-            <div
-              className="h-full rounded-full bg-sage transition-all"
-              style={{ width: `${percent}%` }}
-            />
-          </div>
-          <span className="text-sm font-medium text-sage">{percent}%</span>
-        </div>
-      </header>
+    <div>
+      <button type="button" className="btn-link" onClick={onBack}>
+        ← Back
+      </button>
 
-      <div className="space-y-6 rounded-2xl bg-white border border-warm p-5 shadow-sm">
+      <h1 style={{ marginTop: 12 }}>{section.title}</h1>
+      <p className="muted">{section.description} — {percent}% done</p>
+
+      <div className="bar">
+        <div className="bar-fill" style={{ width: `${percent}%` }} />
+      </div>
+
+      <div className="block" style={{ marginTop: 16 }}>
         {section.fields.map((field) => (
           <FieldInput
             key={field.id}
@@ -56,9 +41,7 @@ export function SectionView({ data, sectionId, onBack, onUpdateField }: SectionV
         ))}
       </div>
 
-      <p className="text-center text-sm text-navy-light">
-        Tap the 🎤 on any field to fill it by voice
-      </p>
+      <p className="muted center">Tap Mic on any field to use voice input.</p>
     </div>
   )
 }

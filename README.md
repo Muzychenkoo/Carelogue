@@ -1,39 +1,34 @@
 # Carelogue
 
-A voice-enabled care passport for your child. Build a structured guide that any new caregiver can read or listen to — sleep schedules, foods tried, how to settle, routines, medical info, and emergency contacts.
+A simple website for your child's care passport — everything a new caregiver needs to know.
+
+## Live site
+
+After merging to `main`, the site is published at:
+
+**https://muzychenkoo.github.io/Carelogue/**
+
+(GitHub Pages — enable Pages → "GitHub Actions" in repo Settings if needed.)
 
 ## Features
 
-- **Structured sections** — Sleep, food (with feeding schedule & hunger cues), settling, daily routine & games, red flags, medical, communication, and emergency contacts
-- **Completion tracking** — See what's filled in and what's still missing
-- **Voice input** — Tap the microphone on any field, or use "Guide me" to fill gaps one question at a time
-- **Voice output** — Read the entire passport aloud to a new caregiver, or read individual sections
-- **Prompts missing info** — The app tells you exactly which fields are empty and walks you through them
-- **Local storage** — All data stays on your device; nothing is sent to a server
+- Structured sections: sleep, food, settling, routine, red flags, medical, contacts, and more
+- Tells you what's still missing
+- Voice input and read-aloud output (Chrome / Edge)
+- Data stays in your browser only
 
-## Getting started
+## Run locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open the URL shown in the terminal (usually `http://localhost:5173`).
+Open http://localhost:5173
 
-## Voice support
-
-Voice input and output use the browser's Web Speech API. For best results, use **Chrome** or **Edge** on desktop or mobile. You'll need to allow microphone access when prompted.
-
-## Build for production
+## Build
 
 ```bash
-npm run build
-npm run preview
+npm run build          # local / custom hosting
+npm run build:pages    # GitHub Pages (base path /Carelogue/)
 ```
-
-## Tech stack
-
-- React + TypeScript + Vite
-- Tailwind CSS
-- Web Speech API (STT + TTS)
-- localStorage persistence

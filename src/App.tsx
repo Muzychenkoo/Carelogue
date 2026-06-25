@@ -18,45 +18,39 @@ function ProfileSetup({
   const [age, setAge] = useState(childAge)
 
   return (
-    <div className="animate-fade-in text-center space-y-6 py-4">
-      <div className="space-y-2">
-        <span className="text-5xl">👶</span>
-        <h1 className="text-3xl font-bold text-navy">Welcome to Carelogue</h1>
-        <p className="text-navy-light max-w-sm mx-auto">
-          Build a care passport so any new caregiver knows exactly how to look after your child.
-        </p>
-      </div>
+    <div>
+      <p className="site-title">Carelogue</p>
+      <h1>Care passport</h1>
+      <p className="muted">A simple guide for anyone looking after your child.</p>
 
-      <div className="rounded-2xl bg-white border border-warm p-6 shadow-sm space-y-4 text-left max-w-md mx-auto">
-        <div>
-          <label className="block text-sm font-medium text-navy mb-1.5">
-            Child&apos;s name <span className="text-coral">*</span>
+      <div className="block" style={{ marginTop: 20 }}>
+        <div className="field">
+          <label className="field-label">
+            Child&apos;s name <span className="req">*</span>
           </label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g. Emma"
-            className="w-full rounded-xl border border-warm bg-white px-4 py-3 text-navy placeholder:text-navy-light/50 focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/20"
           />
         </div>
-        <div>
-          <label className="block text-sm font-medium text-navy mb-1.5">
-            Age <span className="text-coral">*</span>
+        <div className="field">
+          <label className="field-label">
+            Age <span className="req">*</span>
           </label>
           <input
             type="text"
             value={age}
             onChange={(e) => setAge(e.target.value)}
             placeholder="e.g. 18 months"
-            className="w-full rounded-xl border border-warm bg-white px-4 py-3 text-navy placeholder:text-navy-light/50 focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/20"
           />
         </div>
         <button
           type="button"
+          className="btn btn-primary btn-block"
           onClick={() => onSave(name.trim(), age.trim())}
           disabled={!name.trim() || !age.trim()}
-          className="w-full rounded-xl bg-coral text-white py-3.5 font-semibold hover:bg-coral-dark active:scale-[0.98] transition-all disabled:opacity-40 shadow-md shadow-coral/20"
         >
           Get started
         </button>
@@ -78,36 +72,23 @@ export default function App() {
   const showSetup = !data.childName.trim() && view === 'dashboard'
 
   return (
-    <div className="min-h-dvh bg-cream">
-      <main className="mx-auto max-w-lg px-4 py-6 pb-12">
-        {showSetup ? (
-          <ProfileSetup
-            childName={data.childName}
-            childAge={data.childAge}
-            onSave={updateProfile}
-          />
-        ) : view === 'dashboard' ? (
-          <Dashboard data={data} onNavigate={navigate} />
-        ) : view === 'section' && activeSection ? (
-          <SectionView
-            data={data}
-            sectionId={activeSection}
-            onBack={() => navigate('dashboard')}
-            onUpdateField={updateField}
-          />
-        ) : view === 'guide' ? (
-          <VoiceGuide
-            data={data}
-            onUpdate={setData}
-            onBack={() => navigate('dashboard')}
-          />
-        ) : view === 'caregiver' ? (
-          <CaregiverView
-            data={data}
-            onBack={() => navigate('dashboard')}
-          />
-        ) : null}
-      </main>
+    <div className="container">
+      {showSetup ? (
+        <ProfileSetup childName={data.childName} childAge={data.childAge} onSave={updateProfile} />
+      ) : view === 'dashboard' ? (
+        <Dashboard data={data} onNavigate={navigate} />
+      ) : view === 'section' && activeSection ? (
+        <SectionView
+          data={data}
+          sectionId={activeSection}
+          onBack={() => navigate('dashboard')}
+          onUpdateField={updateField}
+        />
+      ) : view === 'guide' ? (
+        <VoiceGuide data={data} onUpdate={setData} onBack={() => navigate('dashboard')} />
+      ) : view === 'caregiver' ? (
+        <CaregiverView data={data} onBack={() => navigate('dashboard')} />
+      ) : null}
     </div>
   )
 }
