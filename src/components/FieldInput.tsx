@@ -17,17 +17,18 @@ export function FieldInput({ field, value, onChange }: FieldInputProps) {
 
   const handleVoiceToggle = () => {
     if (isListening) {
-      stopListening()
-      if (transcript.trim()) {
+      stopListening((finalText) => {
+        const text = finalText.trim()
+        if (!text) return
         if (field.type === 'list') {
-          const items = parseVoiceListInput(transcript)
+          const items = parseVoiceListInput(text)
           const current = Array.isArray(value) ? value : []
           onChange([...current, ...items])
         } else {
-          onChange(transcript.trim())
+          onChange(text)
         }
         resetTranscript()
-      }
+      })
     } else {
       startListening()
     }

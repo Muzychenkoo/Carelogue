@@ -1,7 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+interface SpeechRecognitionResult {
+  isFinal: boolean
+  0: { transcript: string }
+  length: number
+}
+
 interface SpeechRecognitionEvent {
-  results: SpeechRecognitionResultList
+  results: SpeechRecognitionResultList & { [index: number]: SpeechRecognitionResult }
   resultIndex: number
 }
 
@@ -28,12 +34,33 @@ declare global {
   }
 }
 
+function buildTranscriptFromEvent(
+  event: SpeechRecognitionEvent,
+  finalTranscriptRef: { current: string },
+): string {
+  let interim = ''
+  for (let i = event.resultIndex; i < event.results.length; i++) {
+    const result = event.results[i]
+    const chunk = result[0].transcript
+    if (result.isFinal) {
+      finalTranscriptRef.current += chunk
+    } else {
+      interim += chunk
+    }
+  }
+  return (finalTranscriptRef.current + interim).trim()
+}
+
 export function useSpeechRecognition() {
   const [isListening, setIsListening] = useState(false)
   const [transcript, setTranscript] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [supported, setSupported] = useState(false)
+
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null)
+  const finalTranscriptRef = useRef('')
+  const transcriptRef = useRef('')
+  const onStoppedRef = useRef<((text: string) => void) | null>(null)
 
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition ?? window.webkitSpeechRecognition
@@ -46,10 +73,8 @@ export function useSpeechRecognition() {
     recognition.lang = 'en-US'
 
     recognition.onresult = (event) => {
-      let text = ''
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        text += event.results[i][0].transcript
-      }
+      const text = buildTranscriptFromEvent(event, finalTranscriptRef)
+      transcriptRef.current = text
       setTranscript(text)
     }
 
@@ -58,10 +83,16 @@ export function useSpeechRecognition() {
         setError(event.error === 'not-allowed' ? 'Microphone access denied' : `Speech error: ${event.error}`)
       }
       setIsListening(false)
+      onStoppedRef.current = null
     }
 
     recognition.onend = () => {
       setIsListening(false)
+      const callback = onStoppedRef.current
+      onStoppedRef.current = null
+      if (callback) {
+        callback(transcriptRef.current)
+      }
     }
 
     recognitionRef.current = recognition
@@ -77,8 +108,11 @@ export function useSpeechRecognition() {
       return
     }
     setError(null)
+    finalTranscriptRef.current = ''
+    transcriptRef.current = ''
     setTranscript('')
     setIsListening(true)
+    onStoppedRef.current = null
     try {
       recognitionRef.current.start()
     } catch {
@@ -87,12 +121,21 @@ export function useSpeechRecognition() {
     }
   }, [])
 
-  const stopListening = useCallback(() => {
+  const stopListening = useCallback((onStopped?: (text: string) => void) => {
+    if (onStopped) {
+      onStoppedRef.current = onStopped
+    }
     recognitionRef.current?.stop()
-    setIsListening(false)
+    if (!onStopped) {
+      setIsListening(false)
+    }
   }, [])
 
-  const resetTranscript = useCallback(() => setTranscript(''), [])
+  const resetTranscript = useCallback(() => {
+    finalTranscriptRef.current = ''
+    transcriptRef.current = ''
+    setTranscript('')
+  }, [])
 
   return { isListening, transcript, error, supported, startListening, stopListening, resetTranscript }
 }

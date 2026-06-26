@@ -61,8 +61,9 @@ export function VoiceGuide({ data, onUpdate, onBack }: VoiceGuideProps) {
 
   const handleVoiceToggle = () => {
     if (isListening) {
-      stopListening()
-      if (transcript.trim()) setPhase('confirm')
+      stopListening((finalText) => {
+        if (finalText.trim()) setPhase('confirm')
+      })
     } else {
       stop()
       resetTranscript()
